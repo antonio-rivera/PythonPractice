@@ -21,12 +21,14 @@ class Bot:
             current_col += 1
             print("RIGHT")
             self.visited_cells.add((current_row, current_col))
+            self.visit_order.append((current_row, current_col))
             self.loc[1] = current_col
             return True
         elif current_col > target_idx:
             current_col -= 1
             print("LEFT")
             self.visited_cells.add((current_row, current_col))
+            self.visit_order.append((current_row, current_col))
             self.loc[1] = current_col
             return True
 
@@ -34,16 +36,18 @@ class Bot:
 
     def move_vertical(self, target_idx: int) -> bool:
         current_row, current_col = self.loc
-        if current_row < target_idx and (current_row + 1, current_col) not in self.visited_cells:
+        if current_row < target_idx:
             current_row += 1
             print("DOWN")
             self.visited_cells.add((current_row, current_col))
+            self.visit_order.append((current_row, current_col))
             self.loc[0] = current_row
             return True
-        elif current_row > target_idx and (current_row - 1, current_col) not in self.visited_cells:
+        elif current_row > target_idx:
             current_row -= 1
             print("UP")
             self.visited_cells.add((current_row, current_col))
+            self.visit_order.append((current_row, current_col))
             self.loc[0] = current_row
             return True
 
