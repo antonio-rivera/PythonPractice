@@ -12,6 +12,9 @@ class Bot:
     def __repr__(self) -> str:
         return f"Bot({self.loc[0]!r}, {self.loc[1]!r})"
 
+    def __len__(self) -> int:
+        return len(self.visited_cells)
+
     def get_location(self):
         return tuple(self.loc)
 
@@ -69,10 +72,10 @@ class Bot:
         row_max, col_max = len(self.grid), len(self.grid[0])
         unvisited_adjacents = []
 
-        adjacents = [(main_loc[0]+1, main_loc[1]), (main_loc[0], main_loc[1]+1),
-                     (main_loc[0]-1, main_loc[1]), (main_loc[0], main_loc[1]-1)]
+        adjacents = [(main_loc[0]-1, main_loc[1]), (main_loc[0], main_loc[1]+1),
+                     (main_loc[0]+1, main_loc[1]), (main_loc[0], main_loc[1]-1)]
         for adj_loc in adjacents:
-            if adj_loc not in self.visited_cells and adj_loc[0] < row_max and adj_loc[1] < col_max:
+            if adj_loc not in self.visited_cells and (0 < adj_loc[0] < row_max) and (0 < adj_loc[1] < col_max):
                 i, j = adj_loc
                 if self.grid[i][j] == target_val:
                     return adj_loc
