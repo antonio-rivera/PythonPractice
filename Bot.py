@@ -15,6 +15,14 @@ class Bot:
     def get_location(self):
         return tuple(self.loc)
 
+    def get_current_cell(self):
+        i, j = self.loc
+        if self.grid:
+            return self.grid[i][j]
+        else:
+            print("No grid to get value from")
+            return None
+
     def move_horizontal(self, target_idx: int) -> bool:
         current_row, current_col = self.loc
         if current_col < target_idx:
@@ -54,11 +62,11 @@ class Bot:
         return False
 
     def search_adjacent(self, target_val, loc=None) -> tuple:
-        if self.board is None:
-            print("No board to get limits")
-            return
+        if self.grid is None:
+            print("No grid to get limits")
+            return None
         main_loc = loc or self.loc
-        row_max, col_max = len(self.board), len(self.board[0])
+        row_max, col_max = len(self.grid), len(self.grid[0])
         unvisited_adjacents = []
 
         adjacents = [(main_loc[0]+1, main_loc[1]), (main_loc[0], main_loc[1]+1),
@@ -66,7 +74,7 @@ class Bot:
         for adj_loc in adjacents:
             if adj_loc not in self.visited_cells and adj_loc[0] < row_max and adj_loc[1] < col_max:
                 i, j = adj_loc
-                if self.board[i][j] == target_val:
+                if self.grid[i][j] == target_val:
                     return adj_loc
 
                 unvisited_adjacents.append(adj_loc)
@@ -76,6 +84,20 @@ class Bot:
             return unvisited_adjacents[0]
 
         return unvisited_adjacents
+
+    def backtrack(self, target_val):
+        unvisited_adj = self.search_adjacent(target_val)
+        while (unvisited_adj == [] and len(self.visit_order) > 0):
+            self.visit_order.pop()
+            i, j = self.visit_order[-1]
+            self.move_vertical(i)
+            self.move_horizontal(j)
+            unvisited_adj = self.search_adjacent(target_val)
+
+        if len(self.visit_order) == 0:
+            return None
+
+        return unvisited_adj
 
     def execute_action(self, condition: bool, action_str: str):
         if condition:
