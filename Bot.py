@@ -7,7 +7,7 @@ class Bot:
         self.loc = initial_loc
         self.visited_cells = {tuple(initial_loc)}
         self.grid = grid
-        self.visit_order = [initial_loc]
+        self.visit_order = [tuple(initial_loc)]
 
     def __repr__(self) -> str:
         return f"Bot({self.loc[0]!r}, {self.loc[1]!r})"
@@ -75,7 +75,7 @@ class Bot:
         adjacents = [(main_loc[0]-1, main_loc[1]), (main_loc[0], main_loc[1]+1),
                      (main_loc[0]+1, main_loc[1]), (main_loc[0], main_loc[1]-1)]
         for adj_loc in adjacents:
-            if adj_loc not in self.visited_cells and (0 < adj_loc[0] < row_max) and (0 < adj_loc[1] < col_max):
+            if adj_loc not in self.visited_cells and (0 <= adj_loc[0] < row_max) and (0 <= adj_loc[1] < col_max):
                 i, j = adj_loc
                 if self.grid[i][j] == target_val:
                     return adj_loc
